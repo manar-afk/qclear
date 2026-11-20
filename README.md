@@ -1,6 +1,11 @@
 # QCLEAR (शुद्ध वायु साथी)
 ### Bilingual GenAI Urban Smog & Clean Air Living Companion
 
+[![QCLEAR CI](https://github.com/manar-afk/qclear/actions/workflows/ci.yml/badge.svg)](https://github.com/manar-afk/qclear/actions/workflows/ci.yml)
+[![Google Cloud Run](https://img.shields.io/badge/Deploy-Google%20Cloud%20Run-blue?logo=googlecloud)](https://cloud.google.com/run)
+[![WCAG 2.1 AA](https://img.shields.io/badge/Accessibility-WCAG%202.1%20AA-success)](https://www.w3.org/WAI/WCAG21/quickref/)
+[![Vertex AI ADC](https://img.shields.io/badge/Auth-Vertex%20AI%20ADC-4285F4?logo=google)](https://cloud.google.com/vertex-ai)
+
 > **Challenge:** "Create a GenAI-powered assistant that helps families and communities navigate severe winter smog and urban air pollution. It should suggest low-emission daily routines, indoor air quality hacks, and sustainable alternatives tailored to their location and lifestyle, while clearly explaining the direct impact of their choices."
 >
 > Built for the **Virtual Prompt Wars Challenge**, evaluated on: **Problem Statement Alignment (Highest Priority)**, **Code Quality**, **Security**, **Efficiency**, **Testing**, and **Accessibility**.
