@@ -92,6 +92,29 @@ export function useAirQuality(initialLat = 28.6139, initialLon = 77.2090, initia
     setSearchResults([]);
   };
 
+  // Immediate search & select first match on Enter / Submit
+  const submitSearch = async (query?: string) => {
+    const q = (query ?? searchQuery).trim();
+    if (!q) return;
+    setIsSearching(true);
+    try {
+      const res = await fetch(`/api/aqi?search=${encodeURIComponent(q)}`);
+      if (res.ok) {
+        const json = await res.json();
+        const results: GeocodingResult[] = json.results || [];
+        if (results.length > 0) {
+          selectLocation(results[0].name, results[0].latitude, results[0].longitude);
+        } else {
+          setError(`No location found for "${q}".`);
+        }
+      }
+    } catch (err) {
+      console.warn('[useAirQuality] submitSearch error:', err);
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
   // Browser Geolocation
   const requestCurrentLocation = () => {
     if (!navigator.geolocation) {
@@ -124,6 +147,7 @@ export function useAirQuality(initialLat = 28.6139, initialLon = 77.2090, initia
     searchResults,
     isSearching,
     selectLocation,
+    submitSearch,
     requestCurrentLocation,
     popularCities: POPULAR_CITIES,
   };

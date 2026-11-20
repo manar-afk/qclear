@@ -57,7 +57,7 @@ export function Header({ onOpenDisclaimer }: HeaderProps) {
             aria-label={t.simpleLanguageToggle}
             title={language === 'hi' ? 'छोटे और आसान शब्दों में मार्गदर्शन' : 'Short sentences and plain words'}
           >
-            <span>{language === 'hi' ? 'सरल भाषा' : 'Plain Text'}</span>
+            <span>{language === 'hi' ? 'सरल भाषा' : 'Simple Language'}</span>
           </button>
 
           {/* High Contrast Mode Toggle */}

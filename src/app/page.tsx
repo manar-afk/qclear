@@ -34,6 +34,7 @@ function DashboardContent() {
     searchResults,
     isSearching,
     selectLocation,
+    submitSearch,
     requestCurrentLocation,
     popularCities,
   } = useAirQuality(household.lat, household.lon, household.locationName);
@@ -52,7 +53,16 @@ function DashboardContent() {
   };
 
   const handleUpdateCustomProfile = (custom: HouseholdProfile) => {
-    setHousehold(custom);
+    const updatedCustom: HouseholdProfile = {
+      ...custom,
+      id: 'custom_household_profile',
+      nameEn: 'Custom Household Profile',
+      nameHi: 'अनुकूलित परिवार प्रोफाइल',
+    };
+    setHousehold(updatedCustom);
+    if (custom.locationName && custom.locationName !== household.locationName) {
+      submitSearch(custom.locationName);
+    }
   };
 
   return (
@@ -73,6 +83,7 @@ function DashboardContent() {
           searchResults={searchResults}
           isSearching={isSearching}
           onSelectCity={selectLocation}
+          onSubmitSearch={submitSearch}
           onRequestLocation={requestCurrentLocation}
           popularCities={popularCities}
         />

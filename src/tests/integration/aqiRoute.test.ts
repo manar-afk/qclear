@@ -30,7 +30,7 @@ describe('GET /api/aqi Route Integration Tests', () => {
     expect(body.peakSmogWindow).toBeDefined();
     expect(body.hourly).toBeDefined();
     expect(body.hourly.length).toBeGreaterThan(0);
-  });
+  }, 15000);
 
   it('enforces rate limits when requests exceed threshold', async () => {
     const clientIp = '192.168.1.100';

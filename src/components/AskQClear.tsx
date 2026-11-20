@@ -22,10 +22,20 @@ export function AskQClear({ aqiData, household }: AskQClearProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const sampleQuestions = [
-    t.askSampleQ1,
-    t.askSampleQ2,
-    t.askSampleQ3,
+  const sampleQuestions = language === 'hi' ? [
+    'क्या आज स्कूल में आउटडोर खेलकूद या प्रार्थना सभा कराना ठीक है?',
+    'इस स्मॉग स्तर पर छोटे बच्चे के कमरे में हवा कैसे बदलें?',
+    'क्या साधारण कपड़े का मास्क PM2.5 स्मॉग को रोक सकता है?',
+    'सफर करते समय कार का एसी किस मोड पर रखना चाहिए?',
+    'अस्थमा और खांसी होने पर क्या तुरंत सावधानी बरतें?',
+    'घर में एयर प्यूरीफायर को किस जगह रखना सबसे असरदार है?',
+  ] : [
+    'Can we hold an outdoor school sports assembly today?',
+    'How should we safely ventilate an infant bedroom right now?',
+    'Does a standard cloth mask block toxic PM2.5 smog?',
+    'Should car AC be on Recirculate or Fresh Air mode?',
+    'What precautions should asthma patients take today?',
+    'Where is the most effective place to put a room air purifier?',
   ];
 
   const handleAsk = async (e?: React.FormEvent, customQuestion?: string) => {

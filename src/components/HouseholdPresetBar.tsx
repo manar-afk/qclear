@@ -50,6 +50,58 @@ export function HouseholdPresetBar({
         </button>
       </div>
 
+      {/* Active Custom Profile Card when customized */}
+      {activeProfile.id === 'custom_household_profile' && (
+        <div className="p-4 rounded-xl border-2 border-blue-600 bg-blue-50/90 dark:bg-blue-950/50 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] uppercase font-black px-2 py-0.5 rounded-md bg-blue-600 text-white">
+                Active Custom Profile
+              </span>
+              <span className="font-bold text-sm text-slate-900 dark:text-white">
+                {activeProfile.locationName || 'Custom Location'}
+              </span>
+            </div>
+            <div className="flex flex-wrap gap-1.5 pt-1 text-xs text-slate-600 dark:text-slate-300">
+              {activeProfile.members.hasToddler && (
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-slate-200 dark:bg-slate-700">
+                  <Baby className="w-3 h-3" /> Toddler
+                </span>
+              )}
+              {activeProfile.members.hasElderly && (
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-slate-200 dark:bg-slate-700">
+                  <HeartPulse className="w-3 h-3" /> Elderly
+                </span>
+              )}
+              {activeProfile.members.hasRespiratorySensitivity && (
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300">
+                  <Flame className="w-3 h-3" /> Respiratory Sensitivity
+                </span>
+              )}
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-slate-200 dark:bg-slate-700">
+                <Bike className="w-3 h-3" /> {activeProfile.commuteMode}
+              </span>
+              {activeProfile.homeSetup.hasPurifier ? (
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
+                  <ShieldCheck className="w-3 h-3" /> Purifier
+                </span>
+              ) : (
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300">
+                  No Purifier
+                </span>
+              )}
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={handleOpenEdit}
+            className="text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline self-start sm:self-auto"
+          >
+            {language === 'hi' ? 'सेटिंग्स बदलें' : 'Edit Settings'}
+          </button>
+        </div>
+      )}
+
       {/* Preset Selector Buttons */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
         {DEMO_PRESETS.map((preset) => {
@@ -113,7 +165,12 @@ export function HouseholdPresetBar({
 
       {/* Profile Edit Modal */}
       {isEditing && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+        <div
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setIsEditing(false);
+          }}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-150"
+        >
           <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 max-w-lg w-full shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between border-b pb-3 dark:border-slate-800">
               <h4 className="text-lg font-bold text-slate-900 dark:text-white">

@@ -31,6 +31,7 @@ interface LiveAQIWidgetProps {
   searchResults: GeocodingResult[];
   isSearching: boolean;
   onSelectCity: (city: string, lat: number, lon: number) => void;
+  onSubmitSearch?: (query?: string) => void;
   onRequestLocation: () => void;
   popularCities: GeocodingResult[];
 }
@@ -45,6 +46,7 @@ export function LiveAQIWidget({
   searchResults,
   isSearching,
   onSelectCity,
+  onSubmitSearch,
   onRequestLocation,
   popularCities,
 }: LiveAQIWidgetProps) {
@@ -105,46 +107,67 @@ export function LiveAQIWidget({
 
       {/* Search & Location Controls */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-slate-200 dark:border-slate-800">
-        {/* City Search Input */}
-        <div className="relative flex-1 max-w-md">
-          <div className="relative">
-            <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" aria-hidden="true" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder={t.searchPlaceholder}
-              className="w-full pl-10 pr-24 py-2.5 rounded-xl text-sm bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-900 dark:text-white"
-              aria-label={t.searchPlaceholder}
-            />
-            {isSearching && (
-              <span className="absolute right-10 top-1/2 -translate-y-1/2 text-xs text-slate-400 animate-pulse">
-                ...
-              </span>
-            )}
+        {/* City Search Form */}
+        <div className="relative flex-1 max-w-lg">
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (searchResults.length > 0) {
+                onSelectCity(searchResults[0].name, searchResults[0].latitude, searchResults[0].longitude);
+              } else if (onSubmitSearch) {
+                onSubmitSearch(searchQuery);
+              }
+            }}
+            className="flex items-center gap-2"
+          >
+            <div className="relative flex-1">
+              <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" aria-hidden="true" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder={t.searchPlaceholder}
+                className="w-full pl-10 pr-10 py-2.5 rounded-xl text-sm bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-900 dark:text-white"
+                aria-label={t.searchPlaceholder}
+              />
+              {isSearching ? (
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-blue-500 font-bold animate-pulse">
+                  ...
+                </span>
+              ) : (
+                <button
+                  type="button"
+                  onClick={onRequestLocation}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded-lg text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition"
+                  title={t.useMyLocation}
+                  aria-label={t.useMyLocation}
+                >
+                  <Crosshair className="w-4 h-4" />
+                </button>
+              )}
+            </div>
+
             <button
-              type="button"
-              onClick={onRequestLocation}
-              className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-lg text-slate-500 hover:text-blue-600 dark:text-slate-400 dark:hover:text-blue-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition"
-              title={t.useMyLocation}
-              aria-label={t.useMyLocation}
+              type="submit"
+              className="px-4 py-2.5 rounded-xl text-xs font-bold bg-blue-600 hover:bg-blue-700 text-white shadow-sm flex items-center gap-1.5 transition flex-shrink-0"
             >
-              <Crosshair className="w-4 h-4" />
+              <Search className="w-3.5 h-3.5" />
+              <span>{t.searchButton || (language === 'hi' ? 'खोजें' : 'Search')}</span>
             </button>
-          </div>
+          </form>
 
           {/* Autocomplete dropdown */}
           {searchResults.length > 0 && (
-            <div className="absolute z-50 left-0 right-0 mt-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-lg overflow-hidden">
+            <div className="absolute z-50 left-0 right-0 mt-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-xl overflow-hidden max-h-60 overflow-y-auto">
               <ul role="listbox">
                 {searchResults.map((city) => (
                   <li key={city.id}>
                     <button
                       type="button"
                       onClick={() => onSelectCity(city.name, city.latitude, city.longitude)}
-                      className="w-full text-left px-4 py-2.5 text-sm hover:bg-blue-50 dark:hover:bg-slate-700/60 flex items-center justify-between transition"
+                      className="w-full text-left px-4 py-2.5 text-sm hover:bg-blue-50 dark:hover:bg-slate-700/60 flex items-center justify-between transition border-b last:border-b-0 border-slate-100 dark:border-slate-700"
                     >
-                      <span className="font-medium text-slate-900 dark:text-white">{city.name}</span>
+                      <span className="font-semibold text-slate-900 dark:text-white">{city.name}</span>
                       <span className="text-xs text-slate-500 dark:text-slate-400">
                         {city.admin1 ? `${city.admin1}, ` : ''}{city.country}
                       </span>
